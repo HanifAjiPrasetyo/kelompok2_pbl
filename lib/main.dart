@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:kelompok2_pbl/app_theme.dart';
-import 'package:kelompok2_pbl/views/home_screen.dart';
+// import 'package:kelompok2_pbl/views/home_screen.dart';
+import 'package:kelompok2_pbl/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         textTheme: AppTheme.textTheme,
         platform: TargetPlatform.android,
       ),
-      home: HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }

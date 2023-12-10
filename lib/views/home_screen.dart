@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:kelompok2_pbl/views/models/tabIcon_data.dart';
 import 'package:kelompok2_pbl/views/training/training_screen.dart';
 import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'app_theme.dart';
 import 'my_diary/my_diary_screen.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   AnimationController? animationController;
+  File? _image;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
 
@@ -68,6 +72,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return true;
   }
 
+  Future<void> _pickImage() async {
+    final XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
   Widget bottomBar() {
     return Column(
       children: <Widget>[
@@ -82,8 +99,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 return;
               }
               setState(() {
-                tabBody =
-                    TrainingScreen(animationController: animationController);
+                _pickImage();
               });
             });
           },
