@@ -1,11 +1,13 @@
 import 'package:kelompok2_pbl/services/api_service.dart';
 import 'package:kelompok2_pbl/views/constants.dart';
 import 'package:kelompok2_pbl/views/login_screen.dart';
+import 'package:kelompok2_pbl/views/ui_view/area_list_view.dart';
 import 'package:kelompok2_pbl/views/ui_view/mediterranean_diet_view.dart';
 // import 'package:kelompok2_pbl/views/ui_view/title_view.dart';
 import 'package:kelompok2_pbl/views/app_theme.dart';
 // import 'package:kelompok2_pbl/views/my_diary/meals_list_view.dart';
 import 'package:flutter/material.dart';
+import 'package:kelompok2_pbl/views/ui_view/title_view.dart';
 
 class MyDiaryScreen extends StatefulWidget {
   const MyDiaryScreen({Key? key, this.animationController}) : super(key: key);
@@ -72,7 +74,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
       Padding(
         padding: EdgeInsets.only(left: 20),
         child: Text(
-          'Informasi',
+          'Informasi KTM',
           style: TextStyle(
             fontFamily: FitnessAppTheme.fontName,
             fontWeight: FontWeight.w500,
@@ -90,6 +92,31 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
             curve:
                 Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController!,
+      ),
+    );
+    listViews.add(
+      Padding(
+        padding: EdgeInsets.only(left: 20),
+        child: Text(
+          'Daftar Buku',
+          style: TextStyle(
+            fontFamily: FitnessAppTheme.fontName,
+            fontWeight: FontWeight.w500,
+            fontSize: 18,
+            letterSpacing: 0.5,
+            color: FitnessAppTheme.lightText,
+          ),
+        ),
+      ),
+    );
+    listViews.add(
+      AreaListView(
+        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+                parent: widget.animationController!,
+                curve: Interval((1 / count) * 5, 1.0,
+                    curve: Curves.fastOutSlowIn))),
+        mainScreenAnimationController: widget.animationController!,
       ),
     );
     // listViews.add(
@@ -276,7 +303,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  'Kelompok 2 PBL',
+                                  'CodeBook',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,

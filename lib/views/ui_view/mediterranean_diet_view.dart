@@ -2,25 +2,73 @@ import 'package:kelompok2_pbl/views/app_theme.dart';
 import 'package:kelompok2_pbl/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MediterranesnDietView extends StatelessWidget {
+class MediterranesnDietView extends StatefulWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  const MediterranesnDietView(
-      {Key? key, this.animationController, this.animation})
+  MediterranesnDietView({Key? key, this.animationController, this.animation})
       : super(key: key);
+
+  @override
+  State<MediterranesnDietView> createState() => _MediterranesnDietViewState();
+}
+
+class _MediterranesnDietViewState extends State<MediterranesnDietView> {
+  String status = '';
+  String nim = '';
+  String nama = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getStatus();
+    getNIM();
+    getNama();
+  }
+
+  Future<void> getStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? ktmValidation = prefs.getBool('ktmValidation');
+
+    setState(() {
+      if (ktmValidation != null && ktmValidation) {
+        status = 'Valid';
+      } else if (ktmValidation == false) {
+        status = 'Belum Valid';
+      }
+    });
+  }
+
+  Future<void> getNIM() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedNIM = prefs.getString('nim');
+
+    setState(() {
+      nim = storedNIM!;
+    });
+  }
+
+  Future<void> getNama() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedNama = prefs.getString('nama');
+
+    setState(() {
+      nama = storedNama!;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController!,
+      animation: widget.animationController!,
       builder: (BuildContext context, Widget? child) {
         return FadeTransition(
-          opacity: animation!,
+          opacity: widget.animation!,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation!.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
@@ -106,7 +154,7 @@ class MediterranesnDietView extends StatelessWidget {
                                                       const EdgeInsets.only(
                                                           left: 8, bottom: 3),
                                                   child: Text(
-                                                    'Belum Valid',
+                                                    status,
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
@@ -116,13 +164,14 @@ class MediterranesnDietView extends StatelessWidget {
                                                           FontWeight.w500,
                                                       fontSize: 16,
                                                       letterSpacing: -0.2,
-                                                      color: Color.fromARGB(
-                                                          255, 199, 14, 14),
+                                                      color: status == 'Valid'
+                                                          ? Colors.green
+                                                          : Colors.red,
                                                     ),
                                                   ),
                                                 ),
                                               ],
-                                            )
+                                            ),
                                           ],
                                         ),
                                       )
@@ -131,90 +180,131 @@ class MediterranesnDietView extends StatelessWidget {
                                   SizedBox(
                                     height: 8,
                                   ),
+                                  Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'NIM',
+                                              style: TextStyle(
+                                                  fontFamily:
+                                                      FitnessAppTheme.fontName,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              width: 30,
+                                            ),
+                                            Text(nim),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Nama',
+                                              style: TextStyle(
+                                                  fontFamily:
+                                                      FitnessAppTheme.fontName,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Text(nama),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 16),
-                            child: Center(
-                              child: Stack(
-                                clipBehavior: Clip.none,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                        color: FitnessAppTheme.white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(100.0),
-                                        ),
-                                        border: new Border.all(
-                                            width: 4,
-                                            color: FitnessAppTheme
-                                                .nearlyDarkBlue
-                                                .withOpacity(0.2)),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text(
-                                            '${(1 * animation!.value).toInt()}x',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontFamily:
-                                                  FitnessAppTheme.fontName,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 24,
-                                              letterSpacing: 0.0,
-                                              color: FitnessAppTheme
-                                                  .nearlyDarkBlue,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Scanned',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontFamily:
-                                                  FitnessAppTheme.fontName,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                              letterSpacing: 0.0,
-                                              color: FitnessAppTheme.grey
-                                                  .withOpacity(0.5),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: CustomPaint(
-                                      painter: CurvePainter(
-                                          colors: [
-                                            FitnessAppTheme.nearlyDarkBlue,
-                                            HexColor("#8A98E8"),
-                                            HexColor("#8A98E8")
-                                          ],
-                                          angle: 140 +
-                                              (360 - 140) *
-                                                  (1.0 - animation!.value)),
-                                      child: SizedBox(
-                                        width: 108,
-                                        height: 108,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
+                          // Padding(
+                          //   padding: const EdgeInsets.only(right: 16),
+                          //   child: Center(
+                          //     child: Stack(
+                          //       clipBehavior: Clip.none,
+                          //       children: <Widget>[
+                          //         Padding(
+                          //           padding: const EdgeInsets.all(8.0),
+                          //           child: Container(
+                          //             width: 100,
+                          //             height: 100,
+                          //             decoration: BoxDecoration(
+                          //               color: FitnessAppTheme.white,
+                          //               borderRadius: BorderRadius.all(
+                          //                 Radius.circular(100.0),
+                          //               ),
+                          //               border: new Border.all(
+                          //                   width: 4,
+                          //                   color: FitnessAppTheme
+                          //                       .nearlyDarkBlue
+                          //                       .withOpacity(0.2)),
+                          //             ),
+                          //             child: Column(
+                          //               mainAxisAlignment:
+                          //                   MainAxisAlignment.center,
+                          //               crossAxisAlignment:
+                          //                   CrossAxisAlignment.center,
+                          //               children: <Widget>[
+                          //                 Text(
+                          //                   '${(counter * widget.animation!.value).toInt()}x',
+                          //                   textAlign: TextAlign.center,
+                          //                   style: TextStyle(
+                          //                     fontFamily:
+                          //                         FitnessAppTheme.fontName,
+                          //                     fontWeight: FontWeight.normal,
+                          //                     fontSize: 24,
+                          //                     letterSpacing: 0.0,
+                          //                     color: FitnessAppTheme
+                          //                         .nearlyDarkBlue,
+                          //                   ),
+                          //                 ),
+                          //                 Text(
+                          //                   'Scanned',
+                          //                   textAlign: TextAlign.center,
+                          //                   style: TextStyle(
+                          //                     fontFamily:
+                          //                         FitnessAppTheme.fontName,
+                          //                     fontWeight: FontWeight.bold,
+                          //                     fontSize: 12,
+                          //                     letterSpacing: 0.0,
+                          //                     color: FitnessAppTheme.grey
+                          //                         .withOpacity(0.5),
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //         ),
+                          //         Padding(
+                          //           padding: const EdgeInsets.all(4.0),
+                          //           child: CustomPaint(
+                          //             painter: CurvePainter(
+                          //                 colors: [
+                          //                   FitnessAppTheme.nearlyDarkBlue,
+                          //                   HexColor("#8A98E8"),
+                          //                   HexColor("#8A98E8")
+                          //                 ],
+                          //                 angle: 140 +
+                          //                     (360 - 140) *
+                          //                         (1.0 -
+                          //                             widget.animation!.value)),
+                          //             child: SizedBox(
+                          //               width: 108,
+                          //               height: 108,
+                          //             ),
+                          //           ),
+                          //         )
+                          //       ],
+                          //     ),
+                          //   ),
+                          // )
                         ],
                       ),
                     ),

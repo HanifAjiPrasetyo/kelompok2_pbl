@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:kelompok2_pbl/app_theme.dart';
+import 'package:kelompok2_pbl/views/home_screen.dart';
 // import 'package:kelompok2_pbl/views/home_screen.dart';
-import 'package:kelompok2_pbl/views/login_screen.dart';
+// import 'package:kelompok2_pbl/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+// import 'package:kelompok2_pbl/views/ui_view/mediterranean_diet_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +15,18 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
   ]).then((_) => runApp(MyApp()));
+  printSharedPreferencesData();
+}
+
+void printSharedPreferencesData() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  Set<String> keys =
+      prefs.getKeys(); // Get all the keys stored in SharedPreferences
+
+  keys.forEach((key) {
+    dynamic value = prefs.get(key); // Retrieve the value for each key
+    print('$key: $value'); // Print the key-value pair
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -34,7 +49,7 @@ class MyApp extends StatelessWidget {
         textTheme: AppTheme.textTheme,
         platform: TargetPlatform.android,
       ),
-      home: LoginScreen(),
+      home: HomeScreen(),
     );
   }
 }

@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:kelompok2_pbl/views/models/tabIcon_data.dart';
 import 'package:kelompok2_pbl/views/training/training_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:kelompok2_pbl/views/ui_view/result.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'app_theme.dart';
 import 'my_diary/my_diary_screen.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   AnimationController? animationController;
-  File? _image;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
 
@@ -72,17 +74,140 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return true;
   }
 
-  Future<void> _pickImage() async {
-    final XFile? pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+  Future<void> _showImageSourceDialog() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Camera'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  File? image = await _pickImage(ImageSource.camera);
+                  if (image != null) {
+                    await _uploadImage(image);
+                  }
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  File? image = await _pickImage(ImageSource.gallery);
+                  if (image != null) {
+                    await _uploadImage(image);
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
+  Future<http.Response> uploadImage(File image) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('https://c0e0-104-196-247-110.ngrok-free.app/api/upload-ktm'),
+    );
+    request.files.add(await http.MultipartFile.fromPath('file', image.path));
+
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      return http.Response.fromStream(response);
+    } else {
+      throw Exception('Error during image upload');
+    }
+  }
+
+  Future<void> _uploadImage(File image) async {
+    try {
+      http.Response message = await uploadImage(image);
+      String body = message.body;
+      final parsedBody = jsonDecode(body);
+      print(message);
+
+      if (message.statusCode == 200) {
+        // Alihkan ke halaman hasil atau response
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResultScreen(body: body),
+          ),
+        );
+        // Set shared preferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        if (parsedBody['nim'] != 'NIM tidak ditemukan' &&
+            parsedBody['nama'] != 'Nama tidak ditemukan') {
+          prefs.setBool('ktmValidation', true);
+          prefs.setString(
+            'nim',
+            parsedBody['nim'],
+          );
+          prefs.setString(
+            'nama',
+            parsedBody['nama'],
+          );
+        } else {
+          prefs.setBool('ktmValidation', false);
+          prefs.setString('nim', '-');
+          prefs.setString('nama', '-');
+        }
       } else {
-        print('No image selected.');
+        // Tampilkan pesan kesalahan
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text('Error during image upload'),
+              actions: [
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
-    });
+    } catch (e) {
+      // Tampilkan pesan kesalahan
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Error during image upload: $e'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future<File?> _pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: source);
+    if (pickedImage != null) {
+      return File(pickedImage.path);
+    }
+    return null;
   }
 
   Widget bottomBar() {
@@ -99,7 +224,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 return;
               }
               setState(() {
-                _pickImage();
+                // File? image = await _pickImage();
+                // if (image != null) {
+                //   http.Response message = await uploadImage(image);
+                //   String body = message.body;
+                //   print(message);
+
+                //   if (message != null) {
+                //     // Alihkan ke halaman hasil atau response
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => ResultScreen(body: body),
+                //       ),
+                //     );
+                //   }
+                // }
+                _showImageSourceDialog();
               });
             });
           },
