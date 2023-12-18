@@ -72,15 +72,15 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
       //   animationController: widget.animationController!,
       // ),
       Padding(
-        padding: EdgeInsets.only(left: 20),
+        padding: EdgeInsets.only(left: 20, top: 20),
         child: Text(
-          'Informasi KTM',
+          'Informasi Umum',
           style: TextStyle(
             fontFamily: FitnessAppTheme.fontName,
             fontWeight: FontWeight.w500,
             fontSize: 18,
             letterSpacing: 0.5,
-            color: FitnessAppTheme.lightText,
+            color: FitnessAppTheme.darkText,
           ),
         ),
       ),
@@ -104,7 +104,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
             fontWeight: FontWeight.w500,
             fontSize: 18,
             letterSpacing: 0.5,
-            color: FitnessAppTheme.lightText,
+            color: FitnessAppTheme.darkText,
           ),
         ),
       ),
@@ -273,7 +273,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                     0.0, 30 * (1.0 - topBarAnimation!.value), 0.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: FitnessAppTheme.white.withOpacity(topBarOpacity),
+                    color: Color.fromARGB(255, 39, 47, 135),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(32.0),
                     ),
@@ -300,7 +300,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Expanded(
-                              child: Padding(
+                              child: Container(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   'CodeBook',
@@ -310,7 +310,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                                     fontWeight: FontWeight.w700,
                                     fontSize: 22 + 6 - 6 * topBarOpacity,
                                     letterSpacing: 1.2,
-                                    color: FitnessAppTheme.darkerText,
+                                    color: FitnessAppTheme.white,
                                   ),
                                 ),
                               ),

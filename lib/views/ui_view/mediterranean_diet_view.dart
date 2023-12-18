@@ -17,8 +17,8 @@ class MediterranesnDietView extends StatefulWidget {
 
 class _MediterranesnDietViewState extends State<MediterranesnDietView> {
   String status = '';
-  String nim = '';
-  String nama = '';
+  String? nim = '';
+  String? nama = '';
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _MediterranesnDietViewState extends State<MediterranesnDietView> {
     String? storedNIM = prefs.getString('nim');
 
     setState(() {
-      nim = storedNIM!;
+      nim = storedNIM;
     });
   }
 
@@ -55,7 +55,7 @@ class _MediterranesnDietViewState extends State<MediterranesnDietView> {
     String? storedNama = prefs.getString('nama');
 
     setState(() {
-      nama = storedNama!;
+      nama = storedNama;
     });
   }
 
@@ -154,7 +154,9 @@ class _MediterranesnDietViewState extends State<MediterranesnDietView> {
                                                       const EdgeInsets.only(
                                                           left: 8, bottom: 3),
                                                   child: Text(
-                                                    status,
+                                                    status != ''
+                                                        ? status
+                                                        : 'Belum Scan',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
@@ -196,7 +198,7 @@ class _MediterranesnDietViewState extends State<MediterranesnDietView> {
                                             SizedBox(
                                               width: 30,
                                             ),
-                                            Text(nim),
+                                            Text(nim != null ? nim! : '-'),
                                           ],
                                         ),
                                         SizedBox(
@@ -214,10 +216,51 @@ class _MediterranesnDietViewState extends State<MediterranesnDietView> {
                                             SizedBox(
                                               width: 20,
                                             ),
-                                            Text(nama),
+                                            Text(nama != null ? nama! : '-'),
                                           ],
                                         ),
                                       ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Center(
+                                    heightFactor: 1,
+                                    child: Container(
+                                      width: 350,
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Color.fromARGB(255, 39, 47, 135),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Petunjuk',
+                                            style: TextStyle(
+                                              fontFamily:
+                                                  FitnessAppTheme.fontName,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(10),
+                                            child: Text(
+                                              '- Klik tombol ➕ untuk melakukan scan KTM\n- Jika data KTM tidak sesuai, ubah pada form hasil scan\n- Setelah data valid, maka Anda dapat meminjam buku dengan menekan daftar buku dibawah',
+                                              style: TextStyle(
+                                                fontFamily:
+                                                    FitnessAppTheme.fontName,
+                                                color: Colors.white,
+                                                fontSize: 12.5,
+                                              ),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
