@@ -40,10 +40,10 @@ class _DetailPageState extends State<DetailPage> {
               Text(
                 'Detail Buku',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    fontFamily: FitnessAppTheme.fontName),
-                textAlign: TextAlign.left,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  fontFamily: FitnessAppTheme.fontName,
+                ),
               ),
               SizedBox(
                 height: 15,
@@ -61,51 +61,74 @@ class _DetailPageState extends State<DetailPage> {
                   children: [
                     Image.asset(
                       widget.imagePath!,
-                      height: 150,
+                      height: 120,
                     ),
                     Container(
+                      margin: EdgeInsets.only(top: 10),
                       padding: EdgeInsets.all(10),
+                      alignment: Alignment.centerLeft,
                       child: Column(
                         children: [
                           Container(
+                            width: double.infinity,
                             child: Column(
                               children: [
-                                Text(
-                                  'Judul Buku',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FitnessAppTheme.fontName,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                                Text(
-                                  '\t\t${widget.title}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: FitnessAppTheme.fontName,
-                                    fontSize: 15,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Judul Buku : ',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FitnessAppTheme.fontName,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        '${widget.title}',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: FitnessAppTheme.fontName,
+                                          fontSize: 15,
+                                        ),
+                                        textAlign: TextAlign.justify,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   height: 8,
                                 ),
-                                Text(
-                                  'Penulis',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FitnessAppTheme.fontName,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                                Text(
-                                  '\t\t${widget.author}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: FitnessAppTheme.fontName,
-                                    fontSize: 15,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Penulis : ',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FitnessAppTheme.fontName,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 50,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        '${widget.author}',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: FitnessAppTheme.fontName,
+                                          fontSize: 15,
+                                        ),
+                                        textAlign: TextAlign.justify,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -117,7 +140,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
               Text(
-                'Data Anda',
+                'Data Peminjaman',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,

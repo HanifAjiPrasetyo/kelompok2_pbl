@@ -216,7 +216,11 @@ class _MediterranesnDietViewState extends State<MediterranesnDietView> {
                                             SizedBox(
                                               width: 20,
                                             ),
-                                            Text(nama != null ? nama! : '-'),
+                                            Expanded(
+                                              child: Text(
+                                                nama != null ? nama! : '-',
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ],

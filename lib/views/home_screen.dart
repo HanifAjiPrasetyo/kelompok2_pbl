@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:kelompok2_pbl/views/models/tabIcon_data.dart';
-import 'package:kelompok2_pbl/views/training/training_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:kelompok2_pbl/views/ui_view/rental_list.dart';
 import 'package:kelompok2_pbl/views/ui_view/result.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'app_theme.dart';
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Future<http.Response> uploadImage(File image) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('https://c0e0-104-196-247-110.ngrok-free.app/api/upload-ktm'),
+      Uri.parse('https://985c-35-236-222-209.ngrok-free.app/api/upload-ktm'),
     );
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
 
@@ -261,8 +261,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      TrainingScreen(animationController: animationController);
+                  tabBody = RentalList();
                 });
               });
             }

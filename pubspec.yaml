@@ -36,6 +36,7 @@ dependencies:
   iconsax: ^0.0.8
   shared_preferences: ^2.2.2
   http: ^1.1.2
+  omni_datetime_picker: ^1.0.9
 
 dev_dependencies:
   flutter_test:
