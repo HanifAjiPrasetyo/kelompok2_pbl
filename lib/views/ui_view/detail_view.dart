@@ -7,17 +7,30 @@ class DetailPage extends StatefulWidget {
   final String? title;
   final String? author;
 
-  const DetailPage(
-      {super.key,
-      required this.imagePath,
-      required this.title,
-      required this.author});
+  const DetailPage({
+    super.key,
+    required this.imagePath,
+    required this.title,
+    required this.author,
+  });
 
   @override
   State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
+  late FormWidget formWidgetInstance;
+
+  @override
+  void initState() {
+    super.initState();
+    formWidgetInstance = FormWidget(
+      imagePath: widget.imagePath,
+      title: widget.title,
+      author: widget.author,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,7 +160,7 @@ class _DetailPageState extends State<DetailPage> {
                     fontFamily: FitnessAppTheme.fontName),
                 textAlign: TextAlign.left,
               ),
-              FormWidget(),
+              formWidgetInstance,
             ],
           ),
         ],

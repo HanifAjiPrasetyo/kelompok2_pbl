@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:kelompok2_pbl/views/app_theme.dart';
 import 'package:kelompok2_pbl/views/ui_view/rental_list.dart';
@@ -5,6 +7,17 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FormWidget extends StatefulWidget {
+  final String? imagePath;
+  final String? title;
+  final String? author;
+
+  const FormWidget({
+    super.key,
+    required this.imagePath,
+    required this.title,
+    required this.author,
+  });
+
   @override
   _FormWidgetState createState() => _FormWidgetState();
 }
@@ -162,10 +175,20 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
                 });
               },
               child: Container(
+                decoration: BoxDecoration(
+                  color: FitnessAppTheme.nearlyDarkBlue,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(12),
+                width: 250,
                 margin: EdgeInsets.only(top: 5),
-                alignment: Alignment.centerLeft,
                 child: Text(
                   "Tanggal Mulai Pinjam",
+                  style: TextStyle(
+                    fontFamily: FitnessAppTheme.fontName,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -210,43 +233,48 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
                 });
               },
               child: Container(
+                decoration: BoxDecoration(
+                  color: FitnessAppTheme.nearlyDarkBlue,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(12),
+                width: 250,
                 margin: EdgeInsets.only(top: 5),
-                alignment: Alignment.centerLeft,
                 child: Text(
                   "Tanggal Akhir Pinjam",
+                  style: TextStyle(
+                    fontFamily: FitnessAppTheme.fontName,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 20.0),
             // Tambahkan tombol untuk submit form
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(
-                  FitnessAppTheme.nearlyDarkBlue,
-                ),
-              ),
+            TextButton(
               onPressed: () {
                 // Lakukan sesuatu dengan data yang diinputkan
                 if (_formKey.currentState!.validate()) {
                   // Form valid, lakukan sesuatu dengan data yang diinputkan
                   _submitForm();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Data berhasil disimpan')),
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RentalList(),
-                    ),
-                  );
                 }
               },
-              child: Text(
-                'Pinjam',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: FitnessAppTheme.fontName,
-                  color: Colors.white,
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: FitnessAppTheme.darkText,
+                ),
+                child: Text(
+                  'Pinjam',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontFamily: FitnessAppTheme.fontName,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -256,11 +284,52 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
     );
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     // Lakukan sesuatu dengan data yang diinputkan, misalnya mengirimkan data ke server
     print('NIM: $_nim');
     print('Name: $_name');
     print('Mulai: $_start');
     print('Akhir: $_end');
+
+    print('Image Path: ${widget.imagePath}');
+    print('Title: ${widget.title}');
+    print('Author: ${widget.author}');
+
+    // Buat objek Map yang mewakili data form
+    Map<String, dynamic> formData = {
+      'nim': _nim,
+      'name': _name,
+      'mulai': _start.toString(),
+      'akhir': _end.toString(),
+      'imagePath': widget.imagePath,
+      'title': widget.title,
+      'author': widget.author,
+    };
+
+    // Ambil instance SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Ambil data yang sudah ada dari SharedPreferences
+    List<String>? existingData = prefs.getStringList('formData');
+
+    // Buat list baru atau tambahkan ke list yang sudah ada
+    List<String> updatedData = existingData ?? [];
+    updatedData.add(jsonEncode(formData));
+
+    // Simpan data ke SharedPreferences
+    prefs.setStringList('formData', updatedData);
+
+    // Tampilkan snackbar atau pesan sukses lainnya
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Data berhasil disimpan')),
+    );
+
+    // Navigasi ke halaman RentalList
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RentalList(),
+      ),
+    );
   }
 }

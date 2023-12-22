@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Future<http.Response> uploadImage(File image) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('https://985c-35-236-222-209.ngrok-free.app/api/upload-ktm'),
+      Uri.parse('https://7171-34-125-96-107.ngrok-free.app/api/upload-ktm'),
     );
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
 
@@ -224,22 +224,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 return;
               }
               setState(() {
-                // File? image = await _pickImage();
-                // if (image != null) {
-                //   http.Response message = await uploadImage(image);
-                //   String body = message.body;
-                //   print(message);
-
-                //   if (message != null) {
-                //     // Alihkan ke halaman hasil atau response
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => ResultScreen(body: body),
-                //       ),
-                //     );
-                //   }
-                // }
                 _showImageSourceDialog();
               });
             });
