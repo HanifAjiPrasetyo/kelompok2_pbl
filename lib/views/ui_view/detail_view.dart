@@ -153,12 +153,15 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
               Text(
-                'Data Peminjaman',
+                'Form Peminjaman',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     fontFamily: FitnessAppTheme.fontName),
                 textAlign: TextAlign.left,
+              ),
+              SizedBox(
+                height: 10,
               ),
               formWidgetInstance,
             ],

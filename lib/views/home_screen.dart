@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Future<http.Response> uploadImage(File image) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('https://7171-34-125-96-107.ngrok-free.app/api/upload-ktm'),
+      Uri.parse('https://b6fd-34-125-65-73.ngrok-free.app/api/upload-ktm'),
     );
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
 
@@ -131,7 +131,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       http.Response message = await uploadImage(image);
       String body = message.body;
       final parsedBody = jsonDecode(body);
-      print(message);
 
       if (message.statusCode == 200) {
         // Alihkan ke halaman hasil atau response

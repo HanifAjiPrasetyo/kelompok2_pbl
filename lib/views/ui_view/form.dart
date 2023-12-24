@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:kelompok2_pbl/views/app_theme.dart';
 import 'package:kelompok2_pbl/views/ui_view/rental_list.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
@@ -26,8 +28,8 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
   // Deklarasikan variabel-variabel yang akan menyimpan input pengguna
   String _nim = '';
   String _name = '';
-  DateTime _start = DateTime.now();
-  DateTime _end = DateTime.now();
+  DateTime? _start = DateTime.now();
+  DateTime? _end = DateTime.now();
 
   String status = '';
   String? nim = '';
@@ -40,6 +42,7 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
     super.initState();
+    initializeDateFormatting('id_ID', null);
     getStatus();
     getNIM();
     getNama();
@@ -89,7 +92,14 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
     return Form(
       key: _formKey,
       child: Container(
-        padding: EdgeInsets.fromLTRB(30, 0, 30, 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15),
+          ),
+          color: FitnessAppTheme.nearlyDarkBlue,
+        ),
+        padding: EdgeInsets.fromLTRB(30, 10, 30, 20),
         child: Column(
           children: [
             TextFormField(
@@ -98,8 +108,15 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
                 labelStyle: TextStyle(
                   fontFamily: FitnessAppTheme.fontName,
                   fontWeight: FontWeight.bold,
+                  color: FitnessAppTheme.nearlyBlue,
                 ),
                 helperText: 'Isikan NIM Anda sesuai data pada halaman awal',
+                helperStyle: TextStyle(
+                  color: const Color.fromARGB(255, 98, 215, 254),
+                ),
+              ),
+              style: TextStyle(
+                color: Colors.white,
               ),
               validator: (value) {
                 if (value != nim) {
@@ -119,8 +136,15 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
                 labelStyle: TextStyle(
                   fontFamily: FitnessAppTheme.fontName,
                   fontWeight: FontWeight.bold,
+                  color: FitnessAppTheme.nearlyBlue,
                 ),
                 helperText: 'Isikan nama Anda sesuai data pada halaman awal',
+                helperStyle: TextStyle(
+                  color: const Color.fromARGB(255, 98, 215, 254),
+                ),
+              ),
+              style: TextStyle(
+                color: Colors.white,
               ),
               validator: (value) {
                 if (value != nama) {
@@ -169,14 +193,13 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
                   barrierDismissible: true,
                 );
 
-                print("dateTime: $dateTimeStart");
                 setState(() {
-                  _start = dateTimeStart!;
+                  _start = dateTimeStart;
                 });
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: FitnessAppTheme.nearlyDarkBlue,
+                  color: FitnessAppTheme.nearlyBlue,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: EdgeInsets.all(12),
@@ -186,11 +209,22 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
                   "Tanggal Mulai Pinjam",
                   style: TextStyle(
                     fontFamily: FitnessAppTheme.fontName,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
+            ),
+            Text(
+              _start != null
+                  ? '${DateFormat('EEEE, d MMMM yyyy HH:mm', 'id_ID').format(_start!)}'
+                  : 'Pilih Tanggal Mulai Pinjam',
+              style: TextStyle(
+                fontFamily: FitnessAppTheme.fontName,
+                color: Colors.white,
+                fontSize: 12,
+              ),
+              textAlign: TextAlign.center,
             ),
             TextButton(
               onPressed: () async {
@@ -227,14 +261,13 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
                   barrierDismissible: true,
                 );
 
-                print("dateTime: $dateTimeEnd");
                 setState(() {
-                  _end = dateTimeEnd!;
+                  _end = dateTimeEnd;
                 });
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: FitnessAppTheme.nearlyDarkBlue,
+                  color: FitnessAppTheme.nearlyBlue,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: EdgeInsets.all(12),
@@ -244,11 +277,21 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
                   "Tanggal Akhir Pinjam",
                   style: TextStyle(
                     fontFamily: FitnessAppTheme.fontName,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
+            ),
+            Text(
+              _end != null
+                  ? '${DateFormat('EEEE, d MMMM yyyy HH:mm', 'id_ID').format(_end!)}'
+                  : 'Pilih Tanggal Akhir Pinjam',
+              style: TextStyle(
+                  fontFamily: FitnessAppTheme.fontName,
+                  color: Colors.white,
+                  fontSize: 12),
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 20.0),
             // Tambahkan tombol untuk submit form
@@ -265,7 +308,7 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: FitnessAppTheme.darkText,
+                  color: FitnessAppTheme.darkerText,
                 ),
                 child: Text(
                   'Pinjam',
@@ -321,7 +364,7 @@ class _FormWidgetState extends State<FormWidget> with TickerProviderStateMixin {
 
     // Tampilkan snackbar atau pesan sukses lainnya
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Data berhasil disimpan')),
+      SnackBar(content: Text('Buku berhasil dipinjam')),
     );
 
     // Navigasi ke halaman RentalList

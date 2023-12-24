@@ -174,15 +174,13 @@ class AreaView extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                imagepath!,
-                                height: 130,
-                              ),
-                            ],
-                          )),
+                        padding: const EdgeInsets.all(15),
+                        child: Image.asset(
+                          imagepath!,
+                          height: 100,
+                          width: 150,
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -47,7 +47,7 @@ class _RentalListState extends State<RentalList> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Rental List',
+          'Riwayat Peminjaman',
           style: TextStyle(
             fontFamily: FitnessAppTheme.fontName,
             fontSize: 20,
@@ -63,7 +63,7 @@ class _RentalListState extends State<RentalList> {
           DateTime endDate = DateTime.parse(rentalItem['akhir']);
           return Container(
             decoration: BoxDecoration(
-              color: FitnessAppTheme.nearlyDarkBlue,
+              color: Color.fromARGB(255, 39, 47, 135),
               borderRadius: BorderRadius.circular(10),
             ),
             child: ListTile(
