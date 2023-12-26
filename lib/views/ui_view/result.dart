@@ -16,6 +16,7 @@ class ResultScreen extends StatefulWidget {
 class _ResultScreenState extends State<ResultScreen> {
   late TextEditingController nimController;
   late TextEditingController namaController;
+  // late TextEditingController resultController;
   SharedPreferences? sharedPreferences;
   late Map<String, dynamic> parsedBody;
 
@@ -24,6 +25,7 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
     nimController = TextEditingController();
     namaController = TextEditingController();
+    // resultController = TextEditingController();
     parsedBody = jsonDecode(widget.body);
     initSharedPreferences();
   }
@@ -34,18 +36,22 @@ class _ResultScreenState extends State<ResultScreen> {
         sharedPreferences!.getString('nim') ?? parsedBody['nim'];
     namaController.text =
         sharedPreferences!.getString('nama') ?? parsedBody['nama'];
+    // resultController.text =
+    //     sharedPreferences!.getString('result') ?? parsedBody['result'];
   }
 
   @override
   void dispose() {
     nimController.dispose();
     namaController.dispose();
+    // resultController.dispose();
     super.dispose();
   }
 
   Future<void> saveData() async {
     await sharedPreferences!.setString('nim', nimController.text);
     await sharedPreferences!.setString('nama', namaController.text);
+    // await sharedPreferences!.setString('result', resultController.text);
     await sharedPreferences!.setBool('ktmValidation', true);
   }
 
@@ -77,6 +83,16 @@ class _ResultScreenState extends State<ResultScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // TextFormField(
+              //   controller: resultController,
+              //   decoration: InputDecoration(
+              //     labelText: 'Result',
+              //     labelStyle: TextStyle(
+              //         color: const Color.fromARGB(255, 119, 221, 255)),
+              //   ),
+              //   keyboardType: TextInputType.number,
+              //   style: TextStyle(color: Colors.white),
+              // ),
               TextFormField(
                 controller: nimController,
                 decoration: InputDecoration(

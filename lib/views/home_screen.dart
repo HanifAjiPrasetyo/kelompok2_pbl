@@ -112,9 +112,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Future<http.Response> uploadImage(File image) async {
+    var url = 'https://67ea-34-125-68-85.ngrok-free.app';
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('https://b6fd-34-125-65-73.ngrok-free.app/api/upload-ktm'),
+      Uri.parse('$url/api/upload-ktm'),
+      // Uri.parse('$url/predict'),
     );
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
 
@@ -142,6 +144,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         );
         // Set shared preferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
+        // prefs.setString('result', parsedBody['result']);
         if (parsedBody['nim'] != 'NIM tidak ditemukan' &&
             parsedBody['nama'] != 'Nama tidak ditemukan') {
           prefs.setBool('ktmValidation', true);
@@ -157,6 +160,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           prefs.setBool('ktmValidation', false);
           prefs.setString('nim', '-');
           prefs.setString('nama', '-');
+          // prefs.setString('result', '-');
         }
       } else {
         // Tampilkan pesan kesalahan
